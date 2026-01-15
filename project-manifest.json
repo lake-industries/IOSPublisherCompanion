@@ -1,6 +1,0 @@
-{
-  "type": "ios-app-publisher",
-  "version": "1.0",
-  "mainFile": "src/main.swift",
-  "description": "IOSPublisherCompanion"
-}
