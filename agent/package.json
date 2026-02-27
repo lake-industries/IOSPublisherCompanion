@@ -1,0 +1,28 @@
+{
+  "name": "iospc-agent",
+  "version": "1.0.0",
+  "description": "Local autonomous agent for eco-friendly task scheduling and optimization",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "stop": "node scripts/shutdown.js",
+    "logs": "tail -f logs/agent.log"
+  },
+  "dependencies": {
+    "bull": "^4.11.4",
+    "sqlite3": "^5.1.6",
+    "node-schedule": "^2.1.1",
+    "pino": "^8.16.2",
+    "pino-pretty": "^10.2.3",
+    "dotenv": "^16.3.1",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

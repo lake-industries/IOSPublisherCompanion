@@ -1,0 +1,61 @@
+name: iOS Build
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20.10.0"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Xcode version
+        run: |
+          sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+          xcode-select --print-path
+
+      - name: Install CocoaPods dependencies
+        working-directory: ./ios
+        run: |
+          pod install
+
+      - name: Build iOS app (Debug)
+        working-directory: ./ios
+        run: |
+          xcodebuild -workspace IOSPublisherCompanion.xcworkspace \
+            -scheme IOSPublisherCompanion \
+            -configuration Debug \
+            -derivedDataPath build \
+            -destination generic/platform=iOS \
+            -verbose \
+            build
+
+      - name: Archive iOS app
+        working-directory: ./ios
+        run: |
+          xcodebuild -workspace IOSPublisherCompanion.xcworkspace \
+            -scheme IOSPublisherCompanion \
+            -configuration Release \
+            -derivedDataPath build \
+            -archivePath build/IOSPublisherCompanion.xcarchive \
+            -verbose \
+            archive
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ios-archive
+          path: ios/build/IOSPublisherCompanion.xcarchive/
